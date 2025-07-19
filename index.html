@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torties Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #ff416c;
+            --secondary: #ff4b2b;
+            --accent: #6a11cb;
+            --light: #ffffff;
+            --dark: #333333;
+            --gray: #f5f5f5;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            line-height: 1.6;
+            overflow: hidden;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .logo {
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 60px;
+            color: #fff;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+        }
+        
+        .logo::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+            z-index: 1;
+        }
+        
+        .logo i {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #ffffff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+        
+        .loading-container {
+            margin: 30px 0;
+        }
+        
+        .loading-text {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #ffd700, #ffa500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .countdown {
+            font-size: 36px;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+            letter-spacing: 3px;
+        }
+        
+        .loader {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 25px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .loader-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            border-radius: 5px;
+            animation: loading 5s linear forwards;
+            box-shadow: 0 0 15px rgba(255, 75, 43, 0.7);
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            padding: 16px 45px;
+            font-size: 20px;
+            font-weight: 700;
+            border-radius: 50px;
+            margin: 20px 0;
+            box-shadow: 0 8px 20px rgba(255, 75, 43, 0.5);
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 1px;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+            z-index: 1;
+        }
+        
+        .btn span {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(255, 75, 43, 0.7);
+        }
+        
+        .btn i {
+            margin-left: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hint {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 30px;
+            font-size: 15px;
+            position: relative;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .background-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 15s infinite linear;
+        }
+        
+        .shape:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            top: 10%;
+            left: 5%;
+            animation-duration: 20s;
+        }
+        
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            bottom: 15%;
+            right: 7%;
+            animation-duration: 25s;
+            animation-direction: reverse;
+        }
+        
+        .shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #ffd700, #ffa500);
+            top: 40%;
+            right: 20%;
+            animation-duration: 15s;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.65);
+            letter-spacing: 0.5px;
+        }
+        
+        @keyframes loading {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+            70% { transform: scale(1.02); box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 40px) rotate(90deg); }
+            50% { transform: translate(40px, 0) rotate(180deg); }
+            75% { transform: translate(20px, -40px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 36px;
+            }
+            
+            .logo {
+                width: 120px;
+                height: 120px;
+                font-size: 50px;
+            }
+            
+            .loading-text {
+                font-size: 24px;
+            }
+            
+            .countdown {
+                font-size: 32px;
+            }
+            
+            .btn {
+                padding: 14px 35px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    
+    <div class="container">
+        <div class="logo">
+            <i class="fas fa-paw"></i>
+        </div>
+        <h1>Torties Online</h1>
+        
+        <div class="loading-container">
+            <div class="loading-text">LOADING</div>
+            <div class="countdown" id="seconds">5</div>
+        </div>
+        
+        <div class="loader">
+            <div class="loader-bar"></div>
+        </div>
+        
+        <a href="https://torties.taobao.com/" class="btn">
+            <span>立即跳转</span>
+            <i class="fas fa-arrow-right"></i>
+        </a>
+        
+        <div class="hint">
+            <p><i class="fas fa-info-circle"></i> 如果页面没有自动跳转，请点击上面的"立即跳转"按钮</p>
+        </div>
+        
+        <div class="footer">
+            <p>Torties Online | 淘宝店铺跳转页</p>
+        </div>
+    </div>
+
+    <script>
+        // 倒计时和自动跳转
+        let seconds = 5;
+        const countdownElement = document.getElementById('seconds');
+        
+        function updateCountdown() {
+            countdownElement.textContent = seconds;
+            seconds--;
+            
+            if (seconds < 0) {
+                window.location.href = "https://torties.taobao.com/";
+            } else {
+                setTimeout(updateCountdown, 1000);
+            }
+        }
+        
+        // 开始倒计时
+        setTimeout(updateCountdown, 1000);
+        
+        // 用户手动点击跳转
+        document.querySelector('.btn').addEventListener('click', function() {
+            window.location.href = "https://torties.taobao.com/";
+        });
+    </script>
+</body>
+</html>
